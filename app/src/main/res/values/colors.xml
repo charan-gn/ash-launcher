@@ -16,6 +16,20 @@
     <color name="whiteInverseTrans80">#CC000000</color>
     <color name="whiteInverseTrans90">#E6000000</color>
 
+    <!--Ash and ember-->
+    <color name="ashBackground">#0F0F0F</color>
+    <color name="ashText">#D8D4CC</color>
+    <color name="ashDim">#6B6860</color>
+    <color name="ashAccent">#E8A33D</color>
+    <color name="ashLightAccent">#B45309</color>
+    <color name="ashTextTrans80">#CCD8D4CC</color>
+    <color name="ashTextTrans50">#80D8D4CC</color>
+    <color name="ashBackgroundTrans50">#800F0F0F</color>
+    <color name="ashBackgroundTrans80">#CC0F0F0F</color>
+    <color name="ashBackgroundTrans90">#E60F0F0F</color>
+    <color name="ashShade">#171614</color>
+    <color name="ashShadeDark">#201D19</color>
+
     <!--Black-->
     <color name="black">#000000</color>
     <color name="blackTrans90">#E6000000</color>

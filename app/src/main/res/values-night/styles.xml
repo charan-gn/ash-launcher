@@ -27,21 +27,23 @@
         <!--        <item name="android:windowTranslucentStatus">false</item>-->
         <!--        <item name="android:windowTranslucentNavigation">true</item>-->
 
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/ashText</item>
         <item name="colorPrimaryDark">@android:color/darker_gray</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/ashAccent</item>
 
-        <item name="primaryColor">@color/white</item>
-        <item name="primaryInverseColor">@color/whiteInverse</item>
+        <item name="primaryColor">@color/ashText</item>
+        <item name="primaryInverseColor">@color/ashBackground</item>
+        <item name="accentColor">@color/ashAccent</item>
+        <item name="dimColor">@color/ashDim</item>
         <item name="primaryTextShadowColor">@color/whiteInverseTrans50</item>
-        <item name="primaryColorTrans50">@color/whiteTrans50</item>
-        <item name="primaryColorTrans80">@color/whiteTrans80</item>
-        <item name="primaryColorInverseTrans50">@color/whiteInverseTrans50</item>
-        <item name="primaryColorInverseTrans80">@color/whiteInverseTrans80</item>
-        <item name="primaryColorInverseTrans90">@color/whiteInverseTrans90</item>
-        <item name="primaryShadeColor">@color/whiteInverseTrans10</item>
-        <item name="primaryShadeDarkColor">@color/whiteInverseTrans25</item>
-        <item name="dialogShadeColor">@color/whiteInverseTrans50</item>
+        <item name="primaryColorTrans50">@color/ashDim</item>
+        <item name="primaryColorTrans80">@color/ashTextTrans80</item>
+        <item name="primaryColorInverseTrans50">@color/ashBackgroundTrans50</item>
+        <item name="primaryColorInverseTrans80">@color/ashBackgroundTrans80</item>
+        <item name="primaryColorInverseTrans90">@color/ashBackgroundTrans90</item>
+        <item name="primaryShadeColor">@color/ashShade</item>
+        <item name="primaryShadeDarkColor">@color/ashShadeDark</item>
+        <item name="dialogShadeColor">@color/ashBackgroundTrans50</item>
 
         <item name="android:fontFamily">@font/jetbrains_mono_regular</item>
         <item name="mainFontFamily">@font/jetbrains_mono_regular</item>
