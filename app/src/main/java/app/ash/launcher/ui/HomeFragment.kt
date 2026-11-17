@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -145,14 +146,16 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     private fun initTabs() {
         binding.tabBar.removeAllViews()
         val typeface = ResourcesCompat.getFont(requireContext(), R.font.jetbrains_mono_regular)
-        val horizontalPadding = (6 * resources.displayMetrics.density).toInt()
+        val horizontalPadding = (2 * resources.displayMetrics.density).toInt()
         pageNames.forEachIndexed { index, name ->
             val tab = TextView(requireContext()).apply {
                 text = " $name "
-                textSize = 14f
+                textSize = 12f
                 letterSpacing = 0f
+                gravity = Gravity.CENTER
                 this.typeface = typeface
                 setPadding(horizontalPadding, 0, horizontalPadding, 0)
+                minWidth = paint.measureText("[ $name ]").roundToInt() + horizontalPadding * 2
                 setOnClickListener { binding.homePager.setCurrentItem(index, true) }
             }
             binding.tabBar.addView(tab)
@@ -161,17 +164,16 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun updateTabs(selected: Int) {
-        val activeBackground = requireContext().getColorFromAttr(R.attr.primaryColor)
-        val activeText = requireContext().getColorFromAttr(R.attr.primaryInverseColor)
-        val inactiveText = requireContext().getColorFromAttr(R.attr.primaryColorTrans50)
-        for (index in 0 until binding.tabBar.childCount) {
+        val accent = requireContext().getColorFromAttr(R.attr.accentColor)
+        val dim = requireContext().getColorFromAttr(R.attr.dimColor)
+        for (index in 0 until minOf(binding.tabBar.childCount, pageNames.size)) {
             val tab = binding.tabBar.getChildAt(index) as TextView
             if (index == selected) {
-                tab.setBackgroundColor(activeBackground)
-                tab.setTextColor(activeText)
+                tab.text = "[ ${pageNames[index]} ]"
+                tab.setTextColor(accent)
             } else {
-                tab.background = null
-                tab.setTextColor(inactiveText)
+                tab.text = " ${pageNames[index]} "
+                tab.setTextColor(dim)
             }
         }
     }
