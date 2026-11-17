@@ -1,43 +1,59 @@
-![Olauncher](https://repository-images.githubusercontent.com/278638069/db0acb80-661b-11eb-803e-926cae5dccb4)
+# ash
 
+A minimal, terminal-inspired Android launcher with an ASCII soul.
 
-# Olauncher | Minimal AF Launcher
-AF stands for Ad-Free! :D
+`ash` starts from [Olauncher](https://github.com/tanujnotes/Olauncher) (GPL-3.0) and is being reshaped into a text-first home screen: monospace everywhere, box-drawing glyphs, a mascot, and horizontal pages that can eventually hold notes, tasks, weather, and quick actions — everything in one place, without the complexity of a traditional launcher.
 
-[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-    alt="Get it on Play Store"
-    height="80" align="middle">](https://play.google.com/store/apps/details?id=app.olauncher)
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80" align="middle">](https://f-droid.org/packages/app.olauncher)
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png"
-    alt="Get it on IzzyOnDroid"
-    height="54" hspace="13" align="middle">](https://apt.izzysoft.de/packages/app.olauncher)
+Clean and quiet like Blloc Ratio, with personality from the terminal.
 
-#### Install using [Play Store,](https://play.google.com/store/apps/details?id=app.olauncher) [F-Droid,](https://f-droid.org/packages/app.olauncher) [IzzyOnDroid](https://apt.izzysoft.de/packages/app.olauncher) or the [latest APK.](https://github.com/tanujnotes/Olauncher/releases/)
+## Vision
 
-To maintain the simplicity of the launcher, a few niche features are available but hidden.
+- **Text-first UI.** App labels and ASCII glyphs instead of icon grids. One accent color, monospace type.
+- **Linux feel, human-friendly.** Terminal aesthetics without making anyone memorize commands. Every gesture has a tap equivalent.
+- **Pages, not clutter.** Swipe left/right between pages. Swipe up for the app drawer.
+- **ASCII personality.** Splash logo, section headers in `┌─┐ │ └─┘` frames, status bars in `░▒▓█`, a small mascot with moods, typewriter reveals, blinking cursor.
+- **Everything in one place.** Launcher, notes, tasks, weather, and a prompt-style command bar — built incrementally.
 
-Please check out the **[About](https://tanujnotes.substack.com/p/olauncher-minimal-af-launcher?utm_source=github)** page in the Olauncher settings for a complete list of features and **FAQs**.
+## Status
 
-##
+Early scaffold. The base launcher builds and runs; features are being layered on in small, reviewable commits.
 
-License: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+- [x] Fork Olauncher base, full history, upstream remote kept for sync
+- [ ] Rebrand package / app identity
+- [ ] 3-page horizontal pager with text page indicator (`[●○○]`)
+- [ ] Empty app drawer (swipe up; intentionally no app list yet)
+- [ ] ASCII splash screen + mascot
+- [ ] Command bar (launch, calc, quick note)
+- [ ] Panels: notes, tasks, weather
+- [ ] Theming pass
 
-Developer: [@tanujnotes](https://x.com/tanujnotes)
+## Tech stack
 
-##
+- Kotlin, XML views + ViewBinding (no Compose in this codebase)
+- Navigation Component, single-activity, MVVM with `MainViewModel`
+- `ViewPager2` for horizontal pages
+- Min SDK 24, target/compile SDK 36, JDK 17
 
-### Other apps from team Olauncher:
+## Build
 
-- [Pro Launcher](https://play.google.com/store/apps/details?id=app.prolauncher) - Pro version of Olauncher with extra features like widgets, weather, folders, etc.
+```sh
+# requirements: JDK 17, Android SDK with platform 36 + build-tools
+./gradlew assembleDebug
+```
 
-- [Note to Self](https://play.google.com/store/apps/details?id=com.makenotetoself) - Free and [open source](https://github.com/jeerovan/ntsapp) notes app with chat like interface and end-to-end encryption.
+Debug build installs alongside Olauncher (`app.olauncher.debug` suffix) until the rebrand lands.
 
-- [Pentastic](https://play.google.com/store/apps/details?id=app.pentastic) - Free and [open source](https://github.com/tanujnotes/Pentastic). A minimal tasks, notes and reminders app.
+## Contributing
 
-- [Supernova](https://github.com/tanujnotes/Supernova) - Free and [open source](https://github.com/tanujnotes/Supernova) alternative of Nova Launcher.
+Humans and AI agents both welcome. Read [`AGENTS.md`](AGENTS.md) before making changes — it documents the architecture, conventions, and current task state so agents don't guess.
 
-##
+Ground rules:
 
-Thank you!
+- Keep commits small and buildable; one concern per commit.
+- Preserve Olauncher's existing behaviors unless a task explicitly replaces them.
+- ASCII art lives in `assets/ascii/*.txt`, not inline strings.
+- Monospace font must be bundled; test at narrow widths.
+
+## License
+
+GNU GPL-3.0. This is a fork of [Olauncher](https://github.com/tanujnotes/Olauncher) by Tanuj Notes; original license and attribution are preserved in [`LICENSE`](LICENSE). `ash` must be distributed under the same license.
