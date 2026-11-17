@@ -13,6 +13,7 @@ import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +36,7 @@ import app.ash.launcher.helper.openUrl
 import app.ash.launcher.helper.showKeyboard
 import app.ash.launcher.helper.showToast
 import app.ash.launcher.helper.uninstall
+import app.ash.launcher.listener.ViewSwipeTouchListener
 
 class AppDrawerFragment : BaseFragment() {
 
@@ -73,10 +75,27 @@ class AppDrawerFragment : BaseFragment() {
         }
 
         initViews()
+        if (DRAWER_EMPTY) {
+            initEmptyState()
+            return
+        }
         initSearch()
         initAdapter()
         initObservers()
         initClickListeners()
+    }
+
+    private fun initEmptyState() {
+        binding.emptyState.isVisible = true
+        binding.emptyState.setOnTouchListener(object : ViewSwipeTouchListener(requireContext(), binding.emptyState) {
+            override fun onSwipeDown() {
+                closeDrawer()
+            }
+
+            override fun onClick(view: View) {
+                closeDrawer()
+            }
+        })
     }
 
     private fun initViews() {
@@ -370,7 +389,7 @@ class AppDrawerFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         cachedIsCjkKeyboard = null
-        binding.search.showKeyboard(prefs.autoShowKeyboard)
+        if (!DRAWER_EMPTY) binding.search.showKeyboard(prefs.autoShowKeyboard)
     }
 
     override fun onStop() {
@@ -382,5 +401,9 @@ class AppDrawerFragment : BaseFragment() {
         super.onDestroyView()
         searchTextView = null
         _binding = null
+    }
+
+    companion object {
+        private const val DRAWER_EMPTY = true
     }
 }
