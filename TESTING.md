@@ -23,6 +23,7 @@ Everything added since the Olauncher fork, in test order. Check items off as the
 9. Handset monospace font (Nerd-patched JetBrains Mono, box-drawing safe)
 10. Local music player page (MediaStore + MediaPlayer)
 11. Test docs and CI build
+12. Visual polish: ash-and-ember palette, accent panel chrome, bracketed tabs, battery gauge, prompt line
 
 ## 1. Launch & brand
 
@@ -34,9 +35,11 @@ Everything added since the Olauncher fork, in test order. Check items off as the
 ## 2. Home shell, tabs, pages
 
 - [ ] Tab bar shows `home notes tasks music more` (fewer entries if page count is lower)
-- [ ] Active tab is inverted (filled background), inactive tabs are dim
+- [ ] Active tab reads `[ home ]` in amber accent; inactive tabs are dim gray (no filled background)
+- [ ] Panel border is dim, panel title is amber, page counter (`1/5`) sits in the bottom border in amber
 - [ ] Tapping a tab switches pages; horizontal swipes also switch pages
 - [ ] Status line (bottom) shows `HH:MM · <page>` and matches the active tab
+- [ ] Battery gauge sits right of the status text in amber; bar fill and % match the system battery
 - [ ] Hint line shows `← → pages · ↑ apps · hold settings` on non-music pages
 - [ ] Page borders align on both edges; no truncated border glyphs
 - [ ] On a narrow phone and at max text scale, panel content shrinks instead of clipping
@@ -46,6 +49,7 @@ Everything added since the Olauncher fork, in test order. Check items off as the
 - [ ] Home page shows the large block clock (tty-clock style, 2-char-thick strokes)
 - [ ] Colon blinks once per second; layout does not shift when it blinks
 - [ ] Date under the clock is lowercase `wed 2026-11-18` format
+- [ ] Dim `~ $ _` prompt sits under the date; the cursor blinks in sync with the clock colon
 - [ ] Clock stays correct after leaving and returning to the launcher
 - [ ] `notes` and `tasks` pages show their figlet word art plus `nothing here yet`
 - [ ] `more` page shows its figlet word art plus `nothing here yet`

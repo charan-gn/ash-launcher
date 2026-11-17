@@ -27,10 +27,11 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 - [x] Configurable pages (2–5) and start page
 - [x] tty-clock-style block clock, figlet splash + page art
 - [x] Local music page (permission flow, play/pause, prev/next, ASCII progress bar)
+- [x] ash-and-ember palette: accent panel titles, bracketed tabs, battery gauge, blinking prompt
 - [ ] ASCII mascot
 - [ ] Command bar (launch, calc, quick note)
 - [ ] Panels: notes, tasks, weather (music is live; other pages are placeholders)
-- [ ] Theming pass
+- [ ] Theming pass (palette and TUI chrome done; dialog/icon cleanup remains)
 
 ## Tech stack
 
