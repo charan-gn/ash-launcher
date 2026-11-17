@@ -10,7 +10,7 @@ Clean and quiet like Blloc Ratio, with personality from the terminal.
 
 - **Text-first UI.** App labels and ASCII glyphs instead of icon grids. One accent color, monospace type.
 - **Linux feel, human-friendly.** Terminal aesthetics without making anyone memorize commands. Every gesture has a tap equivalent.
-- **Pages, not clutter.** Swipe left/right between pages. Swipe up for the app drawer.
+- **Pages, not clutter.** Swipe left/right between pages. Swipe up for the app drawer. A built-in music page plays local audio without leaving the launcher.
 - **ASCII personality.** Splash logo, section headers in `┌─┐ │ └─┘` frames, status bars in `░▒▓█`, a small mascot with moods, typewriter reveals, blinking cursor.
 - **Everything in one place.** Launcher, notes, tasks, weather, and a prompt-style command bar — built incrementally.
 
@@ -25,9 +25,11 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 - [x] ASCII terminal settings panel (mono type throughout, live options only)
 - [x] ASCII splash screen with on/off toggle
 - [x] Configurable pages (2–5) and start page
+- [x] tty-clock-style block clock, figlet splash + page art
+- [x] Local music page (permission flow, play/pause, prev/next, ASCII progress bar)
 - [ ] ASCII mascot
 - [ ] Command bar (launch, calc, quick note)
-- [ ] Panels: notes, tasks, weather
+- [ ] Panels: notes, tasks, weather (music is live; other pages are placeholders)
 - [ ] Theming pass
 
 ## Tech stack
@@ -45,6 +47,10 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 ```
 
 Debug builds install as `app.ash.launcher.debug`, so they can coexist with any other launcher.
+
+## Testing
+
+[`TESTING.md`](TESTING.md) is the running checklist of everything added so far: tabs/pager, clock and ASCII art, splash, settings rows, drawer, gestures, and the music page (including permission and playback edge cases).
 
 ## Contributing
 
