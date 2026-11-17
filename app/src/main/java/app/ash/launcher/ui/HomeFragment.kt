@@ -1,9 +1,16 @@
 package app.ash.launcher.ui
 
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -269,7 +276,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         val date = dateFormat.format(now).lowercase(Locale.ENGLISH)
         val blinkColon = (now.time / 1000) % 2 == 0L
         val name = pageNames.getOrElse(currentPage) { "" }
-        binding.statusLine.text = getString(R.string.home_status, time, name)
+        updateStatusLine(time, name)
         binding.hintLine.text = getString(
             if (name == MUSIC_PAGE) R.string.music_hint else R.string.home_hint,
         )
@@ -283,6 +290,37 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         binding.homePager.post {
             if (isAdded && _binding != null) pagerAdapter.setHomeContent(lines)
         }
+    }
+
+    private fun updateStatusLine(time: String, name: String) {
+        val status = getString(R.string.home_status, time, name)
+        val percent = batteryPercent()
+        if (percent == null) {
+            binding.statusLine.text = status
+            return
+        }
+        val filled = (percent / 100f * BATTERY_CELLS).roundToInt().coerceIn(0, BATTERY_CELLS)
+        val gauge = "[" + "█".repeat(filled) + "░".repeat(BATTERY_CELLS - filled) + "] $percent%"
+        val text = SpannableStringBuilder(status).append("  ").append(gauge)
+        text.setSpan(
+            ForegroundColorSpan(requireContext().getColorFromAttr(R.attr.accentColor)),
+            status.length + 2,
+            text.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+        )
+        binding.statusLine.text = text
+    }
+
+    private fun batteryPercent(): Int? {
+        val manager = requireContext().getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
+        val capacity = manager?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY) ?: -1
+        if (capacity in 0..100) return capacity
+        val intent = requireContext().registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+            ?: return null
+        val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+        val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+        if (level < 0 || scale <= 0) return null
+        return level * 100 / scale
     }
 
     private fun initObservers() {
@@ -329,6 +367,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
 
     private companion object {
         const val STATUS_REFRESH_MS = 1_000L
+        const val BATTERY_CELLS = 10
         const val MAX_TRACK_CHARS = 28
         const val MUSIC_PAGE = "music"
     }
