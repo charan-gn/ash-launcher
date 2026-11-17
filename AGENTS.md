@@ -17,7 +17,7 @@ Read `README.md` for vision and roadmap status.
   - `appListFragment` → `ui/AppDrawerFragment.kt` (app drawer; intentionally empty)
   - `settingsFragment` → `ui/SettingsFragment.kt`
 - **Home pager:** `ui/HomePagerAdapter.kt` + `res/layout/item_home_page.xml`. Pages are plain `RecyclerView` items (not fragments). Page labels are ASCII box art generated in `HomePagerAdapter.pageArt()`; indicator `[●○○]` is set by `HomeFragment.updateIndicator()`. Pages are placeholders; add real page content here.
-- **Fonts:** bundled JetBrains Mono at `res/font/jetbrains_mono_regular.ttf` (OFL license in `licenses/OFL-JetBrainsMono.txt`). New ASCII/monospace UI must use it; never rely on system monospace fallback.
+- **Fonts:** bundled JetBrains Mono at `res/font/jetbrains_mono_regular.ttf` (OFL license in `licenses/OFL-JetBrainsMono.txt`). It is the **Nerd Fonts–patched** build (`JetBrainsMonoNerdFontMono-Regular`), required so box-drawing and `●○` glyphs render natively — plain JetBrains Mono lacks them and the fallback font breaks ASCII layouts. New ASCII/monospace UI must use it; never rely on system monospace fallback.
 - **State:** `MainViewModel` (app list, selected app, live events), `Prefs` (SharedPreferences wrapper in `data/Prefs.kt`), constants in `data/Constants.kt`.
 - **Gestures:** `listener/OnSwipeTouchListener.kt` (attached to each pager page in `HomePagerAdapter`) and `listener/ViewSwipeTouchListener.kt` (empty-drawer overlay). On the pager home: horizontal swipe → page change (ViewPager2), swipe up → empty app drawer, swipe down → notification shade, long press → settings. The old left/right app-launch swipes and double-tap lock are no longer wired on home.
 - **Drawer:** `AppDrawerFragment` + `AppDrawerAdapter` + `SearchView` + `RecyclerView`; overscroll at top closes it.
@@ -30,7 +30,7 @@ Read `README.md` for vision and roadmap status.
 3. **Preserve Olauncher behavior** unless the task explicitly replaces it. Don't silently delete gestures or prefs.
 4. **ASCII art conventions** (once art is added): store in `app/src/main/assets/ascii/*.txt`, never inline in Kotlin. Bundle the monospace font — never rely on system fallback. Provide narrow (≤32 col) and wide (≤48 col) variants of large pieces. Render with fixed line height, `letterSpacing = 0`. Test on a narrow phone width.
 5. **License:** GPL-3.0. Keep `LICENSE` and upstream attribution. Do not add code that can't ship under GPL-3.0.
-6. **Package identity:** complete the rebrand before release work. Debug builds currently use `app.olauncher.debug`.
+6. **Package identity:** `app.ash.launcher` (debug: `app.ash.launcher.debug`). Keep it consistent in manifests, nav graphs, accessibility config, and release metadata.
 
 ## Roadmap state
 
@@ -46,6 +46,7 @@ Read `README.md` for vision and roadmap status.
 ## Known gotchas
 
 - **Gesture conflict resolved by pager:** horizontal swipes now page; the old swipe-left/right app-launch prefs remain in `Prefs` but are inert on the pager home. Don't silently delete them; decide the gesture mapping before rewiring.
+- **Font is Nerd-patched.** Do not replace `res/font/jetbrains_mono_regular.ttf` with plain JetBrains Mono: box-drawing glyphs (`┌─┐│└┘`) and `●○` disappear and fallback metrics clip the ASCII frames (confirmed on device).
 - **App drawer is intentionally empty.** Controlled by `DRAWER_EMPTY = true` in `AppDrawerFragment`; the layout keeps the search/recycler views hidden behind `emptyState`. Swipe down or tap closes it. Do not re-enable app listing without explicit instruction.
 - **Home content replaced:** the original clock + 8-pinned-apps home layout is gone; `HomeFragment` was rewritten. Don't resurrect `homeApp1..8` or the old swipe listeners; add real content via pager pages instead.
 - **fastlane/ metadata** was removed (it referenced upstream package ids). Add new publishing metadata only when a release pipeline exists.
