@@ -1,10 +1,15 @@
 package app.ash.launcher.ui.widget
 
 import android.content.Context
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
+import app.ash.launcher.R
+import app.ash.launcher.helper.getColorFromAttr
 import kotlin.math.floor
 
 class AsciiPanelView @JvmOverloads constructor(
@@ -14,6 +19,8 @@ class AsciiPanelView @JvmOverloads constructor(
 
     private var title = ""
     private var bodyLines: List<String> = emptyList()
+    private var footer = ""
+    private var dimLastLine = false
     private val baseTextSizePx = textSize
 
     init {
@@ -23,9 +30,16 @@ class AsciiPanelView @JvmOverloads constructor(
         setLineSpacing(0f, 1f)
     }
 
-    fun setPanel(title: String, lines: List<String> = emptyList()) {
+    fun setPanel(
+        title: String,
+        lines: List<String> = emptyList(),
+        footer: String? = null,
+        dimLastLine: Boolean = false,
+    ) {
         this.title = title
         this.bodyLines = lines
+        this.footer = footer.orEmpty()
+        this.dimLastLine = dimLastLine
         rebuild()
     }
 
@@ -48,27 +62,40 @@ class AsciiPanelView @JvmOverloads constructor(
         val inner = columns - 2
         if (inner <= title.length + 2) return
 
-        val topBar = "┌─ $title " + "─".repeat(inner - title.length - 3) + "┐"
-        val bottomBar = "└" + "─".repeat(inner) + "┘"
+        val accent = context.getColorFromAttr(R.attr.accentColor)
+        val dim = context.getColorFromAttr(R.attr.dimColor)
+        val content = context.getColorFromAttr(R.attr.primaryColor)
 
         val body = MutableList(rows - 2) { "" }
         val start = (body.size - bodyLines.size) / 2
+        var dimRow = -1
         bodyLines.forEachIndexed { index, line ->
             val row = start + index
-            if (row in body.indices) body[row] = line
+            if (row in body.indices) {
+                body[row] = line
+                if (dimLastLine && index == bodyLines.lastIndex) dimRow = row
+            }
         }
 
-        text = buildString {
-            append(topBar)
-            body.forEach { line ->
-                append('\n')
-                append('│')
-                append(line.padCenter(inner))
-                append('│')
-            }
-            append('\n')
-            append(bottomBar)
+        val builder = SpannableStringBuilder()
+        builder.appendColored("┌─ ", dim)
+        builder.appendColored(title, accent)
+        builder.appendColored(" " + "─".repeat(inner - title.length - 3) + "┐", dim)
+        body.forEachIndexed { index, line ->
+            builder.append('\n')
+            builder.appendColored("│", dim)
+            builder.appendColored(line.padCenter(inner), if (index == dimRow) dim else content)
+            builder.appendColored("│", dim)
         }
+        builder.append('\n')
+        if (footer.isNotBlank() && footer.length <= inner - 3) {
+            builder.appendColored("└─ ", dim)
+            builder.appendColored(footer, accent)
+            builder.appendColored(" " + "─".repeat(inner - footer.length - 3) + "┘", dim)
+        } else {
+            builder.appendColored("└" + "─".repeat(inner) + "┘", dim)
+        }
+        text = builder
     }
 
     private fun applyFitScale() {
@@ -90,6 +117,13 @@ class AsciiPanelView @JvmOverloads constructor(
             TypedValue.COMPLEX_UNIT_PX,
             scaled.coerceAtLeast(baseTextSizePx * 0.6f),
         )
+    }
+
+    private fun SpannableStringBuilder.appendColored(value: String, color: Int) {
+        if (value.isEmpty()) return
+        val start = length
+        append(value)
+        setSpan(ForegroundColorSpan(color), start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 
     private fun String.padCenter(width: Int): String {

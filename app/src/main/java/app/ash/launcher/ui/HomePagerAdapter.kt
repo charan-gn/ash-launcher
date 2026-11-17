@@ -64,6 +64,8 @@ class HomePagerAdapter(
     }
 
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-        holder.binding.panel.setPanel(pageNames[position], pageContent[position] ?: placeholder)
+        val lines = pageContent[position] ?: placeholder
+        val footer = "${position + 1}/${pageNames.size}"
+        holder.binding.panel.setPanel(pageNames[position], lines, footer)
     }
 }
