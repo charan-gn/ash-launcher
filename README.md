@@ -20,8 +20,8 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 
 - [x] Fork Olauncher base, full history, upstream remote kept for sync
 - [x] Rebrand package / app identity (`app.ash.launcher`)
-- [ ] 3-page horizontal pager with text page indicator (`[●○○]`)
-- [ ] Empty app drawer (swipe up; intentionally no app list yet)
+- [x] 3-page horizontal pager with text page indicator (`[●○○]`)
+- [x] Empty app drawer (swipe up; intentionally no app list yet)
 - [ ] ASCII splash screen + mascot
 - [ ] Command bar (launch, calc, quick note)
 - [ ] Panels: notes, tasks, weather
