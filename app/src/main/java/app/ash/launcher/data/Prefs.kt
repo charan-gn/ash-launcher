@@ -36,7 +36,9 @@ class Prefs(context: Context) {
     private val WALLPAPER_MSG_SHOWN = "WALLPAPER_MSG_SHOWN"
     private val SHARE_SHOWN_TIME = "SHARE_SHOWN_TIME"
     private val TEXT_SIZE_SCALE = "TEXT_SIZE_SCALE"
-    private val BOLD_FONT = "BOLD_FONT"
+    private val PAGE_COUNT = "PAGE_COUNT"
+    private val START_PAGE = "START_PAGE"
+    private val ASCII_SPLASH = "ASCII_SPLASH"
     private val PRO_MESSAGE_SHOWN = "PRO_MESSAGE_SHOWN"
     private val HIDE_SET_DEFAULT_LAUNCHER = "HIDE_SET_DEFAULT_LAUNCHER"
     private val SCREEN_TIME_LAST_UPDATED = "SCREEN_TIME_LAST_UPDATED"
@@ -200,9 +202,21 @@ class Prefs(context: Context) {
         get() = prefs.getFloat(TEXT_SIZE_SCALE, 1.0f)
         set(value) = prefs.edit { putFloat(TEXT_SIZE_SCALE, value).apply() }
 
-    var boldFont: Boolean
-        get() = prefs.getBoolean(BOLD_FONT, false)
-        set(value) = prefs.edit { putBoolean(BOLD_FONT, value).apply() }
+    var pageCount: Int
+        get() = prefs.getInt(PAGE_COUNT, DEFAULT_PAGE_COUNT).coerceIn(MIN_PAGE_COUNT, MAX_PAGE_COUNT)
+        set(value) = prefs.edit {
+            putInt(PAGE_COUNT, value.coerceIn(MIN_PAGE_COUNT, MAX_PAGE_COUNT)).apply()
+        }
+
+    var startPage: Int
+        get() = prefs.getInt(START_PAGE, 1).coerceIn(1, pageCount)
+        set(value) = prefs.edit {
+            putInt(START_PAGE, value.coerceIn(1, pageCount)).apply()
+        }
+
+    var asciiSplash: Boolean
+        get() = prefs.getBoolean(ASCII_SPLASH, true)
+        set(value) = prefs.edit { putBoolean(ASCII_SPLASH, value).apply() }
 
     var proMessageShown: Boolean
         get() = prefs.getBoolean(PRO_MESSAGE_SHOWN, false)
@@ -644,4 +658,10 @@ class Prefs(context: Context) {
     fun getAppRenameLabel(appPackage: String): String = prefs.getString(appPackage, "").toString()
 
     fun setAppRenameLabel(appPackage: String, renameLabel: String) = prefs.edit { putString(appPackage, renameLabel) }
+
+    companion object {
+        const val MIN_PAGE_COUNT = 2
+        const val MAX_PAGE_COUNT = 5
+        const val DEFAULT_PAGE_COUNT = 3
+    }
 }

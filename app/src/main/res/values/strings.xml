@@ -25,7 +25,8 @@
     <string name="instagram" translatable="false">Instagram</string>
 
     <string name="app">App</string>
-    <string name="drawer_empty" translatable="false">empty</string>
+    <string name="drawer_empty" translatable="false">┌──────────────────┐\n│  no apps yet     │\n│  swipe down to   │\n│  go back         │\n└──────────────────┘</string>
+    <string name="splash_art" translatable="false">┌────────────┐\n│            │\n│  ash   &gt;_  │\n│            │\n└────────────┘</string>
     <string name="set_as_default_launcher">Set as default launcher</string>
     <string name="set_as_default_launcher_u"><u>Set as default launcher</u></string>
     <string name="set_as_default_launcher_first">Set ash as default first</string>
@@ -181,4 +182,26 @@
     <string name="invalid_shortcut">Invalid shortcut</string>
     <string name="shortcut_not_found">Shortcut not found</string>
     <string name="unable_to_open_shortcut">Unable to open shortcut</string>
+
+    <!-- ash terminal UI. ASCII chrome stays English and monospaced by design. -->
+    <string name="settings_header" translatable="false">ash ~ settings</string>
+    <string name="settings_divider" translatable="false">────────────────────────</string>
+    <string name="settings_section_launcher" translatable="false">[ launcher ]</string>
+    <string name="settings_section_home" translatable="false">[ home ]</string>
+    <string name="settings_section_appearance" translatable="false">[ appearance ]</string>
+    <string name="settings_pages" translatable="false">pages</string>
+    <string name="settings_start_page" translatable="false">start page</string>
+    <string name="settings_splash" translatable="false">ascii splash</string>
+    <string name="settings_status_bar" translatable="false">status bar</string>
+    <string name="settings_theme" translatable="false">theme</string>
+    <string name="settings_text_scale" translatable="false">text scale</string>
+    <string name="settings_on" translatable="false">on</string>
+    <string name="settings_off" translatable="false">off</string>
+    <string name="settings_dark" translatable="false">dark</string>
+    <string name="settings_light" translatable="false">light</string>
+    <string name="settings_system" translatable="false">system</string>
+    <string name="settings_prompt_set_default" translatable="false">&gt; set as default launcher</string>
+    <string name="settings_prompt_source" translatable="false">&gt; source (github)</string>
+    <string name="settings_prompt_app_info" translatable="false">&gt; app info</string>
+    <string name="settings_version" translatable="false">ash %1$s</string>
 </resources>

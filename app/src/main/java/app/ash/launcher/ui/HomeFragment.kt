@@ -20,6 +20,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var prefs: Prefs
     private lateinit var viewModel: MainViewModel
+    private var pageCount = Prefs.DEFAULT_PAGE_COUNT
+    private var startPage = 0
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -31,6 +33,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         prefs = Prefs(requireContext())
+        pageCount = prefs.pageCount
+        startPage = (prefs.startPage - 1).coerceIn(0, pageCount - 1)
         viewModel = activity?.run {
             ViewModelProvider(this)[MainViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
@@ -42,7 +46,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        binding.homePager.setCurrentItem(HOME_PAGE, false)
+        binding.homePager.setCurrentItem(startPage, false)
         viewModel.isOlauncherDefault()
         if (prefs.showStatusBar) showStatusBar()
         else hideStatusBar()
@@ -56,6 +60,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     private fun initPager() {
         binding.homePager.adapter = HomePagerAdapter(
             requireContext(),
+            pageCount,
             object : HomePagerAdapter.GestureCallbacks {
                 override fun onSwipeUp() {
                     openAppDrawer()
@@ -75,7 +80,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
                 updateIndicator(position)
             }
         })
-        updateIndicator(HOME_PAGE)
+        binding.homePager.setCurrentItem(startPage, false)
+        updateIndicator(startPage)
     }
 
     private fun initObservers() {
@@ -85,7 +91,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun updateIndicator(page: Int) {
-        val marks = (0 until HomePagerAdapter.PAGE_COUNT).joinToString("") {
+        val marks = (0 until pageCount).joinToString("") {
             if (it == page) "●" else "○"
         }
         binding.pageIndicator.text = "[$marks]"
@@ -123,9 +129,5 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val HOME_PAGE = 0
     }
 }

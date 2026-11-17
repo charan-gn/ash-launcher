@@ -22,7 +22,10 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 - [x] Rebrand package / app identity (`app.ash.launcher`)
 - [x] 3-page horizontal pager with text page indicator (`[●○○]`)
 - [x] Empty app drawer (swipe up; intentionally no app list yet)
-- [ ] ASCII splash screen + mascot
+- [x] ASCII terminal settings panel (mono type throughout, live options only)
+- [x] ASCII splash screen with on/off toggle
+- [x] Configurable pages (2–5) and start page
+- [ ] ASCII mascot
 - [ ] Command bar (launch, calc, quick note)
 - [ ] Panels: notes, tasks, weather
 - [ ] Theming pass

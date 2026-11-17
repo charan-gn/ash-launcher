@@ -14,4 +14,19 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph"
         tools:ignore="FragmentTagUsage" />
+
+    <TextView
+        android:id="@+id/splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
+        android:fontFamily="@font/jetbrains_mono_regular"
+        android:gravity="center"
+        android:letterSpacing="0"
+        android:text="@string/splash_art"
+        android:textColor="?attr/primaryColor"
+        android:textSize="18sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </FrameLayout>

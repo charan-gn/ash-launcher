@@ -231,8 +231,6 @@ class AppDrawerFragment : BaseFragment() {
                 if (prefs.firstHide) {
                     binding.search.hideKeyboard()
                     prefs.firstHide = false
-                    viewModel.showDialog.postValue(Constants.Dialog.HIDDEN)
-                    findNavController().navigate(R.id.action_appListFragment_to_settingsFragment2)
                 }
                 viewModel.getAppList()
                 viewModel.getHiddenApps()
@@ -377,9 +375,7 @@ class AppDrawerFragment : BaseFragment() {
     }
 
     private fun checkMessageAndExit() {
-        if (!closeDrawer()) return
-        if (flag == Constants.FLAG_LAUNCH_APP)
-            viewModel.checkForMessages.call()
+        closeDrawer()
     }
 
     // Pops only the drawer. A plain popBackStack() from a late overscroll frame could pop the

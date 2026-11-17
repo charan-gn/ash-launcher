@@ -9,6 +9,7 @@ import app.ash.launcher.listener.OnSwipeTouchListener
 
 class HomePagerAdapter(
     private val context: Context,
+    private val pageCount: Int,
     private val callbacks: GestureCallbacks,
 ) : RecyclerView.Adapter<HomePagerAdapter.PageViewHolder>() {
 
@@ -20,7 +21,7 @@ class HomePagerAdapter(
 
     class PageViewHolder(val binding: ItemHomePageBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun getItemCount() = PAGE_COUNT
+    override fun getItemCount() = pageCount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
         val binding = ItemHomePageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -50,9 +51,5 @@ class HomePagerAdapter(
         val border = "─".repeat(inner)
         val content = " " + title.padEnd(inner - 1)
         return "┌$border┐\n│$content│\n└$border┘"
-    }
-
-    companion object {
-        const val PAGE_COUNT = 3
     }
 }

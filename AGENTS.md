@@ -13,12 +13,14 @@ Read `README.md` for vision and roadmap status.
 - **Single activity:** `app/src/main/java/app/ash/launcher/MainActivity.kt`. Declares the HOME intent filter. Hosts a `NavHostFragment`.
 - **UI approach:** XML layouts + ViewBinding only. **No Compose in this codebase — do not introduce it without explicit instruction.**
 - **Navigation:** `app/src/main/res/navigation/nav_graph.xml`
-  - `mainFragment` → `ui/HomeFragment.kt` (home screen; now a 3-page `ViewPager2`)
+  - `mainFragment` → `ui/HomeFragment.kt` (home screen; `ViewPager2` with 2–5 pages)
   - `appListFragment` → `ui/AppDrawerFragment.kt` (app drawer; intentionally empty)
   - `settingsFragment` → `ui/SettingsFragment.kt`
-- **Home pager:** `ui/HomePagerAdapter.kt` + `res/layout/item_home_page.xml`. Pages are plain `RecyclerView` items (not fragments). Page labels are ASCII box art generated in `HomePagerAdapter.pageArt()`; indicator `[●○○]` is set by `HomeFragment.updateIndicator()`. Pages are placeholders; add real page content here.
+- **Home pager:** `ui/HomePagerAdapter.kt` + `res/layout/item_home_page.xml`. Pages are plain `RecyclerView` items (not fragments). Page labels are ASCII box art generated in `HomePagerAdapter.pageArt()`; indicator `[●○○]` is set by `HomeFragment.updateIndicator()`. Page count and start page come from `Prefs.pageCount` (2–5) and `Prefs.startPage` (1-based), edited in settings. Pages are placeholders; add real page content here.
 - **Fonts:** bundled JetBrains Mono at `res/font/jetbrains_mono_regular.ttf` (OFL license in `licenses/OFL-JetBrainsMono.txt`). It is the **Nerd Fonts–patched** build (`JetBrainsMonoNerdFontMono-Regular`), required so box-drawing and `●○` glyphs render natively — plain JetBrains Mono lacks them and the fallback font breaks ASCII layouts. New ASCII/monospace UI must use it; never rely on system monospace fallback.
 - **State:** `MainViewModel` (app list, selected app, live events), `Prefs` (SharedPreferences wrapper in `data/Prefs.kt`), constants in `data/Constants.kt`.
+- **Settings:** `ui/SettingsFragment.kt` + `res/layout/fragment_settings.xml` are a hand-built terminal panel (ASCII section headers, mono labels, values on the right), not a PreferenceScreen. Live rows: set default, source, app info, pages, start page, ASCII splash, status bar, theme (long-press for system), text scale. No layout-land variant — the single scrolling layout is used in both orientations.
+- **Splash:** `activity_main.xml` has a full-screen `splash` TextView showing `splash_art`; `MainActivity.onCreate` fades it out when `Prefs.asciiSplash` is on and this is a cold start.
 - **Gestures:** `listener/OnSwipeTouchListener.kt` (attached to each pager page in `HomePagerAdapter`) and `listener/ViewSwipeTouchListener.kt` (empty-drawer overlay). On the pager home: horizontal swipe → page change (ViewPager2), swipe up → empty app drawer, swipe down → notification shade, long press → settings. The old left/right app-launch swipes and double-tap lock are no longer wired on home.
 - **Drawer:** `AppDrawerFragment` + `AppDrawerAdapter` + `SearchView` + `RecyclerView`; overscroll at top closes it.
 - **Build:** minSdk 24, compile/target SDK 36, JDK 17, AGP/Gradle 8.9.1, Kotlin 2.1.20. ViewBinding enabled.
@@ -36,9 +38,10 @@ Read `README.md` for vision and roadmap status.
 
 - [x] Fork Olauncher base (full history, `upstream` remote kept for syncing)
 - [x] Rebrand package / app identity (`app.ash.launcher`)
-- [x] 3-page horizontal pager + text page indicator
+- [x] Horizontal pager (2–5 pages configurable) + text page indicator
 - [x] Empty app drawer (swipe up; no app list yet by design)
-- [ ] ASCII splash screen + mascot
+- [x] ASCII terminal settings panel
+- [x] ASCII splash screen (toggleable; no mascot yet)
 - [ ] Command bar (app launch, calculator, quick note)
 - [ ] Panels: notes, tasks, weather
 - [ ] Theming pass
@@ -50,5 +53,6 @@ Read `README.md` for vision and roadmap status.
 - **App drawer is intentionally empty.** Controlled by `DRAWER_EMPTY = true` in `AppDrawerFragment`; the layout keeps the search/recycler views hidden behind `emptyState`. Swipe down or tap closes it. Do not re-enable app listing without explicit instruction.
 - **Home content replaced:** the original clock + 8-pinned-apps home layout is gone; `HomeFragment` was rewritten. Don't resurrect `homeApp1..8` or the old swipe listeners; add real content via pager pages instead.
 - **fastlane/ metadata** was removed (it referenced upstream package ids). Add new publishing metadata only when a release pipeline exists.
-- Upstream promo dialogs (`MainActivity.checkForMessages`: review/share/pro/wallpaper) still run and point at upstream links. Remove them during polish; don't wire new features to them.
-- Old strings referencing "Olauncher" still exist in translated resources and settings copy; clean up in the theming/polish pass.
+- **Upstream promo system is gone.** `checkForMessages`, user-state review/share/pro/wallpaper dialogs, and their settings entry points were removed. Don't reintroduce review-begging or upstream links; keep `Constants.Dialog` unused for now.
+- **Dead Olauncher settings were removed** (pinned-app count, date/time, alignment, auto-keyboard, daily wallpaper, bold font, swipe-apps rows, double-tap lock, hidden apps, share/rate/twitter). Their prefs and helper code remain in the data layer but have no UI; don't resurrect rows without an ash feature behind them.
+- Old strings referencing "Olauncher" still exist in translated resources; clean up in the theming/polish pass.
