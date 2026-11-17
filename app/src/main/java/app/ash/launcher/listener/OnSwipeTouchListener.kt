@@ -22,6 +22,7 @@ Source: https://www.tutorialspoint.com/how-to-handle-swipe-gestures-in-kotlin
 
 internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
     private var longPressOn = false
+    private var viewWidth = 1f
 
     //    private var doubleTapOn = false
     private val gestureDetector: GestureDetector
@@ -29,6 +30,7 @@ internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
         if (motionEvent.action == MotionEvent.ACTION_UP)
             longPressOn = false
+        viewWidth = view.width.coerceAtLeast(1).toFloat()
         return gestureDetector.onTouchEvent(motionEvent)
     }
 
@@ -45,6 +47,7 @@ internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
 //                doubleTapOn = false
 //                onTripleClick()
 //            }
+            onTap((e.x / viewWidth).coerceIn(0f, 1f))
             onClick()
             return super.onSingleTapUp(e)
         }
@@ -106,6 +109,7 @@ internal open class OnSwipeTouchListener(c: Context?) : OnTouchListener {
     open fun onDoubleClick() {}
     open fun onTripleClick() {}
     open fun onClick() {}
+    open fun onTap(xFraction: Float) {}
 
     init {
         gestureDetector = GestureDetector(c, GestureListener())

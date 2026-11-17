@@ -32,6 +32,7 @@ import app.ash.launcher.helper.isPackageInstalled
 import app.ash.launcher.helper.isPrivateSpaceLocked
 import app.ash.launcher.helper.showToast
 import app.ash.launcher.helper.usageStats.EventLogWrapper
+import app.ash.launcher.player.MusicPlayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -66,6 +67,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val resetLauncherLiveData = SingleLiveEvent<Unit?>()
     // Home button for recents feature disabled
     // val showRecentApps = SingleLiveEvent<Unit?>()
+
+    val musicPlayer by lazy { MusicPlayer(appContext) }
 
     fun selectedApp(appModel: AppModel, flag: Int) {
         if (appModel is AppModel.PrivateSpaceHeader) return
@@ -529,5 +532,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 e.printStackTrace()
             }
         }
+    }
+
+    override fun onCleared() {
+        musicPlayer.release()
+        super.onCleared()
     }
 }

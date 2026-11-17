@@ -24,9 +24,9 @@
         android:fontFamily="@font/jetbrains_mono_regular"
         android:gravity="center"
         android:letterSpacing="0"
-        android:text="@string/splash_art"
         android:textColor="?attr/primaryColor"
         android:textSize="18sp"
         android:visibility="gone"
+        tools:text="ash"
         tools:visibility="visible" />
 </FrameLayout>

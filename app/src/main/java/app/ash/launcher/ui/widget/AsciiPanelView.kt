@@ -2,6 +2,7 @@ package app.ash.launcher.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import androidx.appcompat.widget.AppCompatTextView
 import kotlin.math.floor
@@ -13,6 +14,7 @@ class AsciiPanelView @JvmOverloads constructor(
 
     private var title = ""
     private var bodyLines: List<String> = emptyList()
+    private val baseTextSizePx = textSize
 
     init {
         gravity = Gravity.CENTER
@@ -33,6 +35,7 @@ class AsciiPanelView @JvmOverloads constructor(
     }
 
     private fun rebuild() {
+        applyFitScale()
         val charWidth = paint.measureText("M")
         val metrics = paint.fontMetrics
         val lineHeight = metrics.descent - metrics.ascent + lineSpacingExtra
@@ -66,6 +69,27 @@ class AsciiPanelView @JvmOverloads constructor(
             append('\n')
             append(bottomBar)
         }
+    }
+
+    private fun applyFitScale() {
+        if (width == 0 || baseTextSizePx <= 0f) return
+        if (paint.textSize != baseTextSizePx) {
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, baseTextSizePx)
+        }
+        val usableWidth = width - compoundPaddingLeft - compoundPaddingRight
+        val charWidth = paint.measureText("M")
+        if (usableWidth <= 0 || charWidth <= 0f) return
+
+        val widestLine = bodyLines.maxOfOrNull { it.length } ?: 0
+        val neededColumns = (maxOf(widestLine, title.length + 5) + 2).toFloat()
+        val availableColumns = usableWidth / charWidth
+        if (availableColumns >= neededColumns) return
+
+        val scaled = baseTextSizePx * (availableColumns / neededColumns) * 0.97f
+        setTextSize(
+            TypedValue.COMPLEX_UNIT_PX,
+            scaled.coerceAtLeast(baseTextSizePx * 0.6f),
+        )
     }
 
     private fun String.padCenter(width: Int): String {

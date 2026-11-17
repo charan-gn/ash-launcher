@@ -25,6 +25,7 @@ import androidx.navigation.findNavController
 import app.ash.launcher.data.Constants
 import app.ash.launcher.data.Prefs
 import app.ash.launcher.databinding.ActivityMainBinding
+import app.ash.launcher.helper.AsciiAssets
 import app.ash.launcher.helper.getColorFromAttr
 import app.ash.launcher.helper.hasBeenHours
 import app.ash.launcher.helper.hasBeenMinutes
@@ -73,6 +74,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (prefs.asciiSplash && savedInstanceState == null) {
+            binding.splash.text = (
+                AsciiAssets.lines(this, "logo") +
+                    listOf("", getString(R.string.splash_tagline))
+                ).joinToString("\n")
             binding.splash.alpha = 0f
             binding.splash.visibility = View.VISIBLE
             binding.splash.animate().alpha(1f).setDuration(150).withEndAction {

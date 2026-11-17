@@ -29,15 +29,22 @@
         <item>home</item>
         <item>notes</item>
         <item>tasks</item>
-        <item>feed</item>
+        <item>music</item>
         <item>more</item>
     </string-array>
     <string name="home_status" translatable="false">%1$s · %2$s</string>
     <string name="home_hint" translatable="false">← → pages · ↑ apps · hold settings</string>
+    <string name="music_hint" translatable="false">tap edges skip · center play/pause</string>
+    <string name="page_empty" translatable="false">nothing here yet</string>
+    <string name="music_permission" translatable="false">grant audio access to play</string>
+    <string name="music_loading" translatable="false">loading tracks</string>
+    <string name="music_no_tracks" translatable="false">no tracks found</string>
+    <string name="music_unknown" translatable="false">unknown</string>
+    <string name="music_error" translatable="false">! playback error</string>
     <string name="apps_panel_title" translatable="false">apps</string>
     <string name="drawer_empty_line" translatable="false">no apps yet</string>
     <string name="drawer_close_hint" translatable="false">swipe down to close</string>
-    <string name="splash_art" translatable="false">┌────────────┐\n│            │\n│  ash   &gt;_  │\n│            │\n└────────────┘</string>
+    <string name="splash_tagline" translatable="false">minimal launcher</string>
     <string name="set_as_default_launcher">Set as default launcher</string>
     <string name="set_as_default_launcher_u"><u>Set as default launcher</u></string>
     <string name="set_as_default_launcher_first">Set ash as default first</string>
