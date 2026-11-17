@@ -34,6 +34,7 @@
     </string-array>
     <string name="home_status" translatable="false">%1$s · %2$s</string>
     <string name="home_hint" translatable="false">← → pages · ↑ apps · hold settings</string>
+    <string name="home_prompt" translatable="false">~ $ %1$s</string>
     <string name="music_hint" translatable="false">tap edges skip · center play/pause</string>
     <string name="page_empty" translatable="false">nothing here yet</string>
     <string name="music_permission" translatable="false">grant audio access to play</string>

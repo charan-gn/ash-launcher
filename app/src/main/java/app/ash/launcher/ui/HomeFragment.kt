@@ -286,7 +286,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         if (clockKey == lastClockKey) return
         lastClockKey = clockKey
         val clockTime = if (blinkColon) time else time.replace(":", " ")
-        val lines = AsciiClock.lines(clockTime) + listOf("", date)
+        val cursor = if (blinkColon) "_" else " "
+        val lines = AsciiClock.lines(clockTime) + listOf("", date, "", getString(R.string.home_prompt, cursor))
         binding.homePager.post {
             if (isAdded && _binding != null) pagerAdapter.setHomeContent(lines)
         }
