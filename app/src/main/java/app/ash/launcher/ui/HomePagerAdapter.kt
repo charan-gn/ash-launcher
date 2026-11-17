@@ -9,7 +9,7 @@ import app.ash.launcher.listener.OnSwipeTouchListener
 
 class HomePagerAdapter(
     private val context: Context,
-    private val pageCount: Int,
+    private val pageNames: List<String>,
     private val callbacks: GestureCallbacks,
 ) : RecyclerView.Adapter<HomePagerAdapter.PageViewHolder>() {
 
@@ -21,7 +21,7 @@ class HomePagerAdapter(
 
     class PageViewHolder(val binding: ItemHomePageBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun getItemCount() = pageCount
+    override fun getItemCount() = pageNames.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
         val binding = ItemHomePageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -42,14 +42,6 @@ class HomePagerAdapter(
     }
 
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-        holder.binding.pageLabel.text = pageArt(position)
-    }
-
-    private fun pageArt(position: Int): String {
-        val title = "PAGE ${position + 1}"
-        val inner = title.length + 2
-        val border = "─".repeat(inner)
-        val content = " " + title.padEnd(inner - 1)
-        return "┌$border┐\n│$content│\n└$border┘"
+        holder.binding.panel.setPanel(pageNames[position], listOf("", "empty", ""))
     }
 }

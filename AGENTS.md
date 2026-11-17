@@ -16,13 +16,13 @@ Read `README.md` for vision and roadmap status.
   - `mainFragment` → `ui/HomeFragment.kt` (home screen; `ViewPager2` with 2–5 pages)
   - `appListFragment` → `ui/AppDrawerFragment.kt` (app drawer; intentionally empty)
   - `settingsFragment` → `ui/SettingsFragment.kt`
-- **Home pager:** `ui/HomePagerAdapter.kt` + `res/layout/item_home_page.xml`. Pages are plain `RecyclerView` items (not fragments). Page labels are ASCII box art generated in `HomePagerAdapter.pageArt()`; indicator `[●○○]` is set by `HomeFragment.updateIndicator()`. Page count and start page come from `Prefs.pageCount` (2–5) and `Prefs.startPage` (1-based), edited in settings. Pages are placeholders; add real page content here.
+- **Home pager (TUI shell):** `ui/HomePagerAdapter.kt` + `res/layout/item_home_page.xml`. Pages are plain `RecyclerView` items (not fragments) rendered by the reusable `ui/widget/AsciiPanelView` — it measures the view in character cells and draws a full box-drawn panel (`┌─ title ─┐`) around its content, so borders always fit the screen. `HomeFragment` builds a tap-able tab bar (`home notes tasks feed more` from `res/values/strings.xml#home_pages`), inverts the active tab, and renders a bottom status line (`HH:mm · page`) plus a hint line. Page count and start page come from `Prefs.pageCount` (2–5) and `Prefs.startPage` (1-based), edited in settings. Pages are placeholders; add real page content to the panel body.
 - **Fonts:** bundled JetBrains Mono at `res/font/jetbrains_mono_regular.ttf` (OFL license in `licenses/OFL-JetBrainsMono.txt`). It is the **Nerd Fonts–patched** build (`JetBrainsMonoNerdFontMono-Regular`), required so box-drawing and `●○` glyphs render natively — plain JetBrains Mono lacks them and the fallback font breaks ASCII layouts. New ASCII/monospace UI must use it; never rely on system monospace fallback.
 - **State:** `MainViewModel` (app list, selected app, live events), `Prefs` (SharedPreferences wrapper in `data/Prefs.kt`), constants in `data/Constants.kt`.
 - **Settings:** `ui/SettingsFragment.kt` + `res/layout/fragment_settings.xml` are a hand-built terminal panel (ASCII section headers, mono labels, values on the right), not a PreferenceScreen. Live rows: set default, source, app info, pages, start page, ASCII splash, status bar, theme (long-press for system), text scale. No layout-land variant — the single scrolling layout is used in both orientations.
 - **Splash:** `activity_main.xml` has a full-screen `splash` TextView showing `splash_art`; `MainActivity.onCreate` fades it out when `Prefs.asciiSplash` is on and this is a cold start.
 - **Gestures:** `listener/OnSwipeTouchListener.kt` (attached to each pager page in `HomePagerAdapter`) and `listener/ViewSwipeTouchListener.kt` (empty-drawer overlay). On the pager home: horizontal swipe → page change (ViewPager2), swipe up → empty app drawer, swipe down → notification shade, long press → settings. The old left/right app-launch swipes and double-tap lock are no longer wired on home.
-- **Drawer:** `AppDrawerFragment` + `AppDrawerAdapter` + `SearchView` + `RecyclerView`; overscroll at top closes it.
+- **Drawer:** `AppDrawerFragment` + `AppDrawerAdapter` + `SearchView` + `RecyclerView`; overscroll at top closes it. With `DRAWER_EMPTY = true`, a full-screen `AsciiPanelView` titled `apps` replaces the list.
 - **Build:** minSdk 24, compile/target SDK 36, JDK 17, AGP/Gradle 8.9.1, Kotlin 2.1.20. ViewBinding enabled.
 
 ## Rules
@@ -38,7 +38,7 @@ Read `README.md` for vision and roadmap status.
 
 - [x] Fork Olauncher base (full history, `upstream` remote kept for syncing)
 - [x] Rebrand package / app identity (`app.ash.launcher`)
-- [x] Horizontal pager (2–5 pages configurable) + text page indicator
+- [x] TUI home shell: boxed pages, tab bar, status/hint lines (2–5 pages configurable)
 - [x] Empty app drawer (swipe up; no app list yet by design)
 - [x] ASCII terminal settings panel
 - [x] ASCII splash screen (toggleable; no mascot yet)

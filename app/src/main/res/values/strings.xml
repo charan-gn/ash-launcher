@@ -25,7 +25,18 @@
     <string name="instagram" translatable="false">Instagram</string>
 
     <string name="app">App</string>
-    <string name="drawer_empty" translatable="false">┌──────────────────┐\n│  no apps yet     │\n│  swipe down to   │\n│  go back         │\n└──────────────────┘</string>
+    <string-array name="home_pages" translatable="false">
+        <item>home</item>
+        <item>notes</item>
+        <item>tasks</item>
+        <item>feed</item>
+        <item>more</item>
+    </string-array>
+    <string name="home_status" translatable="false">%1$s · %2$s</string>
+    <string name="home_hint" translatable="false">← → pages · ↑ apps · hold settings</string>
+    <string name="apps_panel_title" translatable="false">apps</string>
+    <string name="drawer_empty_line" translatable="false">no apps yet</string>
+    <string name="drawer_close_hint" translatable="false">swipe down to close</string>
     <string name="splash_art" translatable="false">┌────────────┐\n│            │\n│  ash   &gt;_  │\n│            │\n└────────────┘</string>
     <string name="set_as_default_launcher">Set as default launcher</string>
     <string name="set_as_default_launcher_u"><u>Set as default launcher</u></string>

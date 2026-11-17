@@ -20,7 +20,7 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 
 - [x] Fork Olauncher base, full history, upstream remote kept for sync
 - [x] Rebrand package / app identity (`app.ash.launcher`)
-- [x] 3-page horizontal pager with text page indicator (`[●○○]`)
+- [x] TUI-style home: boxed pages, tab bar, status + hint lines (2–5 pages configurable)
 - [x] Empty app drawer (swipe up; intentionally no app list yet)
 - [x] ASCII terminal settings panel (mono type throughout, live options only)
 - [x] ASCII splash screen with on/off toggle

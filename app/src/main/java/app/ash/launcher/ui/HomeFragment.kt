@@ -2,10 +2,14 @@ package app.ash.launcher.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,6 +19,10 @@ import app.ash.launcher.R
 import app.ash.launcher.data.Prefs
 import app.ash.launcher.databinding.FragmentHomeBinding
 import app.ash.launcher.helper.expandNotificationDrawer
+import app.ash.launcher.helper.getColorFromAttr
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeFragment : BaseFragment(), View.OnClickListener {
 
@@ -22,8 +30,18 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     private lateinit var viewModel: MainViewModel
     private var pageCount = Prefs.DEFAULT_PAGE_COUNT
     private var startPage = 0
+    private var currentPage = 0
+    private var pageNames: List<String> = emptyList()
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val clockHandler = Handler(Looper.getMainLooper())
+    private val clockTick = object : Runnable {
+        override fun run() {
+            updateStatusLine()
+            clockHandler.postDelayed(this, STATUS_REFRESH_MS)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -35,11 +53,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         prefs = Prefs(requireContext())
         pageCount = prefs.pageCount
         startPage = (prefs.startPage - 1).coerceIn(0, pageCount - 1)
+        pageNames = resources.getStringArray(R.array.home_pages).take(pageCount)
         viewModel = activity?.run {
             ViewModelProvider(this)[MainViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
 
         initPager()
+        initTabs()
         initObservers()
         binding.setDefaultLauncher.setOnClickListener(this)
     }
@@ -50,6 +70,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         viewModel.isOlauncherDefault()
         if (prefs.showStatusBar) showStatusBar()
         else hideStatusBar()
+        clockHandler.removeCallbacks(clockTick)
+        clockHandler.post(clockTick)
+    }
+
+    override fun onPause() {
+        clockHandler.removeCallbacks(clockTick)
+        super.onPause()
     }
 
     override fun onClick(view: View) {
@@ -60,7 +87,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     private fun initPager() {
         binding.homePager.adapter = HomePagerAdapter(
             requireContext(),
-            pageCount,
+            pageNames,
             object : HomePagerAdapter.GestureCallbacks {
                 override fun onSwipeUp() {
                     openAppDrawer()
@@ -77,24 +104,60 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         )
         binding.homePager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                updateIndicator(position)
+                currentPage = position
+                updateTabs(position)
+                updateStatusLine()
             }
         })
+        currentPage = startPage
         binding.homePager.setCurrentItem(startPage, false)
-        updateIndicator(startPage)
+        updateStatusLine()
+    }
+
+    private fun initTabs() {
+        binding.tabBar.removeAllViews()
+        val typeface = ResourcesCompat.getFont(requireContext(), R.font.jetbrains_mono_regular)
+        val horizontalPadding = (6 * resources.displayMetrics.density).toInt()
+        pageNames.forEachIndexed { index, name ->
+            val tab = TextView(requireContext()).apply {
+                text = " $name "
+                textSize = 14f
+                letterSpacing = 0f
+                this.typeface = typeface
+                setPadding(horizontalPadding, 0, horizontalPadding, 0)
+                setOnClickListener { binding.homePager.setCurrentItem(index, true) }
+            }
+            binding.tabBar.addView(tab)
+        }
+        updateTabs(currentPage)
+    }
+
+    private fun updateTabs(selected: Int) {
+        val activeBackground = requireContext().getColorFromAttr(R.attr.primaryColor)
+        val activeText = requireContext().getColorFromAttr(R.attr.primaryInverseColor)
+        val inactiveText = requireContext().getColorFromAttr(R.attr.primaryColorTrans50)
+        for (index in 0 until binding.tabBar.childCount) {
+            val tab = binding.tabBar.getChildAt(index) as TextView
+            if (index == selected) {
+                tab.setBackgroundColor(activeBackground)
+                tab.setTextColor(activeText)
+            } else {
+                tab.background = null
+                tab.setTextColor(inactiveText)
+            }
+        }
+    }
+
+    private fun updateStatusLine() {
+        val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+        val name = pageNames.getOrElse(currentPage) { "" }
+        binding.statusLine.text = getString(R.string.home_status, time, name)
     }
 
     private fun initObservers() {
         viewModel.isOlauncherDefault.observe(viewLifecycleOwner) { isDefault ->
             binding.setDefaultLauncher.isVisible = isDefault.not() && prefs.hideSetDefaultLauncher.not()
         }
-    }
-
-    private fun updateIndicator(page: Int) {
-        val marks = (0 until pageCount).joinToString("") {
-            if (it == page) "●" else "○"
-        }
-        binding.pageIndicator.text = "[$marks]"
     }
 
     private fun openAppDrawer() {
@@ -127,7 +190,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onDestroyView() {
+        clockHandler.removeCallbacks(clockTick)
         super.onDestroyView()
         _binding = null
+    }
+
+    private companion object {
+        const val STATUS_REFRESH_MS = 30_000L
     }
 }

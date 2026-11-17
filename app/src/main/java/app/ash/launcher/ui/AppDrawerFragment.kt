@@ -86,6 +86,10 @@ class AppDrawerFragment : BaseFragment() {
     }
 
     private fun initEmptyState() {
+        binding.emptyState.setPanel(
+            getString(R.string.apps_panel_title),
+            listOf("", getString(R.string.drawer_empty_line), "", getString(R.string.drawer_close_hint))
+        )
         binding.emptyState.isVisible = true
         binding.emptyState.setOnTouchListener(object : ViewSwipeTouchListener(requireContext(), binding.emptyState) {
             override fun onSwipeDown() {
