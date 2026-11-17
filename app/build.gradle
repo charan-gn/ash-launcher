@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "app.olauncher"
+        applicationId "app.ash.launcher"
         minSdkVersion 24
         targetSdkVersion 36
         versionCode 117
@@ -45,7 +45,7 @@ android {
         includeInApk = false
         includeInBundle = true
     }
-    namespace 'app.olauncher'
+    namespace 'app.ash.launcher'
 }
 
 dependencies {

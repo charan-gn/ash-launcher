@@ -19,7 +19,7 @@ Clean and quiet like Blloc Ratio, with personality from the terminal.
 Early scaffold. The base launcher builds and runs; features are being layered on in small, reviewable commits.
 
 - [x] Fork Olauncher base, full history, upstream remote kept for sync
-- [ ] Rebrand package / app identity
+- [x] Rebrand package / app identity (`app.ash.launcher`)
 - [ ] 3-page horizontal pager with text page indicator (`[●○○]`)
 - [ ] Empty app drawer (swipe up; intentionally no app list yet)
 - [ ] ASCII splash screen + mascot
@@ -41,7 +41,7 @@ Early scaffold. The base launcher builds and runs; features are being layered on
 ./gradlew assembleDebug
 ```
 
-Debug build installs alongside Olauncher (`app.olauncher.debug` suffix) until the rebrand lands.
+Debug builds install as `app.ash.launcher.debug`, so they can coexist with any other launcher.
 
 ## Contributing
 

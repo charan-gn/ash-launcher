@@ -10,7 +10,7 @@ Read `README.md` for vision and roadmap status.
 
 ## Architecture (verified against the code — keep this accurate)
 
-- **Single activity:** `app/src/main/java/app/olauncher/MainActivity.kt`. Declares the HOME intent filter. Hosts a `NavHostFragment`.
+- **Single activity:** `app/src/main/java/app/ash/launcher/MainActivity.kt`. Declares the HOME intent filter. Hosts a `NavHostFragment`.
 - **UI approach:** XML layouts + ViewBinding only. **No Compose in this codebase — do not introduce it without explicit instruction.**
 - **Navigation:** `app/src/main/res/navigation/nav_graph.xml`
   - `mainFragment` → `ui/HomeFragment.kt` (home screen)
@@ -33,7 +33,7 @@ Read `README.md` for vision and roadmap status.
 ## Roadmap state
 
 - [x] Fork Olauncher base (full history, `upstream` remote kept for syncing)
-- [ ] Rebrand package / app identity (in progress)
+- [x] Rebrand package / app identity (`app.ash.launcher`)
 - [ ] 3-page horizontal pager + text page indicator
 - [ ] Empty app drawer (swipe up; no app list yet by design)
 - [ ] ASCII splash screen + mascot
@@ -46,5 +46,5 @@ Read `README.md` for vision and roadmap status.
 - **Gesture conflict:** horizontal left/right swipes currently launch user-configured apps. The pager intentionally takes over horizontal swipes. The left/right-launch prefs remain in place but become inert on the pager home; document this instead of ripping out the prefs.
 - **App drawer is intentionally empty** until the pager milestone is done. Do not re-enable app listing without explicit instruction.
 - **Home content replaced:** the original 8-pinned-apps home layout is being replaced by the pager. App launching remains available via the drawer later; don't assume the old home app slots exist.
-- **fastlane/ metadata** upstream references `app.olauncher` package ids and Play Store listing. Do not republish it as `ash` without rewriting it.
+- **fastlane/ metadata** was removed (it referenced upstream package ids). Add new publishing metadata only when a release pipeline exists.
 - Olauncher Pro prompts and rate-app dialogs still reference upstream app ids; they need removal or repointing during theming/polish.
