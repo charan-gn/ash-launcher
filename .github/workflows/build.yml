@@ -24,8 +24,13 @@ jobs:
 
       - name: Install SDK packages
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          MGR="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$MGR" ]; then
+            MGR="$(find "$SDK/cmdline-tools" -path '*/bin/sdkmanager' | sort | tail -n1)"
+          fi
+          yes | "$MGR" --licenses > /dev/null || true
+          "$MGR" "platforms;android-36" "build-tools;36.0.0"
 
       - uses: gradle/actions/setup-gradle@v4
 
